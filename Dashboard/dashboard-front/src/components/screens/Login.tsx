@@ -17,9 +17,12 @@ export default function Login() {
     event.preventDefault();
 
     const formData = new FormData(event.currentTarget);
-    const username = formData.get('username') as string;
+    const userName = formData.get('userName') as string;
+    const password = formData.get('password') as string;
 
-    auth.signin(username, () => {
+    console.log({ userName, password });
+
+    auth.login({ userName, password }, () => {
       // Sends the user back to the page he tried to visit
       // when he was redirected to the login page.
       navigate(from, { replace: true });
@@ -42,13 +45,13 @@ export default function Login() {
                   <label className="label">
                     <span className="label-text">Email</span>
                   </label>
-                  <input type="text" name="username" placeholder="username" className="input input-bordered" />
+                  <input type="text" name="userName" placeholder="user name" className="input input-bordered" />
                 </div>
                 <div className="form-control">
                   <label className="label">
                     <span className="label-text">Password</span>
                   </label>
-                  <input type="text" placeholder="password" className="input input-bordered" />
+                  <input type="password" name="password" placeholder="password" className="input input-bordered" />
                   <label className="label">
                     <a href="#" className="label-text-alt link link-hover">
                       Forgot password?

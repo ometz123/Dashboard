@@ -19,16 +19,19 @@ export class UsersService {
       password
     });
     await this.usersRepository.save(user)
-
+    return `New user "${userName}" Created`
   }
   async login(userName: string, password: string) {
-    const user = this.usersRepository.findOne({
+    const user = await this.usersRepository.findOne({
       where: {
         userName, password
       }
     })
+    console.log({ user });
+
     if (!user) throw new NotFoundException("username or password is not correct.")
-    return userName
+
+    return { userName }
   }
 
   // findAll() {
