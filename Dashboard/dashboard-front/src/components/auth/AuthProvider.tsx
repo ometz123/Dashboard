@@ -1,61 +1,82 @@
 /* global VoidFunction, JSX */
 import { createContext, useState, useContext, ReactNode } from 'react';
 import { useNavigate, useLocation, Navigate } from 'react-router-dom';
-import { fakeAuthProvider } from '~/components/auth/provider';
+import { apiServices } from '~/api/APIservices';
+//import { apiServices } from '~/api/APIservices';
+import { authProvider } from '~/components/auth/provider';
 import NavItem from '~/components/shared/Nav/NavItem';
+import { User } from '~/interfaces/user';
 
 interface AuthContextType {
-  user: any;
-  signin: (user: string, callback: VoidFunction) => void;
-  signout: (callback: VoidFunction) => void;
+  user: User | null;
+  login: (user: User, callback: VoidFunction) => void;
+  logout: (callback: VoidFunction) => void;
 }
 
 const AuthContext = createContext<AuthContextType>(null!);
 
 function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<any>(null);
+  console.log("in auth provider");
 
-  const signin = (newUser: string, callback: VoidFunction) => {
-    return fakeAuthProvider.signin(() => {
+  const [user, setUser] = useState<User | null>(null);
+
+  const login = async (newUser: User, callback: VoidFunction) => {
+    console.log("in login");
+    console.log({ newUser });
+
+
+    const { userName, password } = newUser
+
+    const user = await apiServices.users.login({ userName, password })
+    console.log({ user });
+
+    return authProvider.login(newUser, user, () => {
+      console.log("in auth provider login");
+
       setUser(newUser);
       callback();
     });
+
   };
 
-  const signout = (callback: VoidFunction) => {
-    return fakeAuthProvider.signout(() => {
+  const logout = (callback: VoidFunction) => {
+    return authProvider.logout(() => {
       setUser(null);
       callback();
     });
   };
 
-  const value = { user, signin, signout };
+  const value = { user, login, logout };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
 function useAuth() {
+  console.log("in use auth");
+
   return useContext(AuthContext);
 }
 
 function AuthStatus() {
+  console.log("in auth status");
+
   const auth = useAuth();
   const navigate = useNavigate();
 
-  if (!auth.user) {
-    return <NavItem href="/login">Sign in</NavItem>;
+  if (!auth.user?.userName) {
+    return <NavItem href="/login">Login</NavItem>;
   }
 
   return (
     <p>
-      Welcome {auth.user}!{' '}
+      Welcome {auth?.user?.userName}!{' '}
       <button
         className="ml-8 whitespace-nowrap inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700"
         onClick={() => {
-          auth.signout(() => navigate('/'));
+          auth.logout(() => navigate('/'));
         }}
       >
-        Sign out
+        Log out
       </button>
     </p>
   );
@@ -66,10 +87,12 @@ type RequireAuthProps = {
 };
 
 function RequireAuth({ children }: RequireAuthProps) {
+  console.log("in require auth");
+
   const auth = useAuth();
   const location = useLocation();
 
-  if (!auth.user) {
+  if (!auth.user?.userName) {
     // Redirect to the /login page, but save the current location.
     // This allows us to send user along to that page after they login.
     return <Navigate to="/login" state={{ from: location }} replace />;

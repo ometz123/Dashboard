@@ -1,5 +1,6 @@
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import { useApi } from './APIHook';
+import { User } from '~/interfaces/user';
 
 const API_BASE_URL = import.meta.env.VITE_APP_API_BASE_URL
 
@@ -73,7 +74,17 @@ export const apiServices = {
             // })).data;
             // console.log(response);
             // return response
-
+        }
+    },
+    users: {
+        login: async ({ userName, password }: { userName: string, password: string }): Promise<User> => {
+            const response: AxiosResponse | void = (await apiService.post(`/users/login`, {
+                userName, password
+            }).catch((e) => {
+                alert(e?.response?.data?.message)
+            }));
+            console.log({ response });
+            return response?.data
         }
     },
     fetchSomeData: async (endPoint?: string | null) => {

@@ -1,17 +1,22 @@
-/* global VoidFunction */
-/**
- * This represents some generic auth provider API.
- */
-const fakeAuthProvider = {
+import { User } from '~/interfaces/user';
+
+const authProvider = {
   isAuthenticated: false,
-  signin(callback: VoidFunction) {
-    fakeAuthProvider.isAuthenticated = true;
-    setTimeout(callback, 100); // fake async
+  login(newUser: User, userFromDb: User, callback: VoidFunction) {
+    console.log({newUser});
+    console.log({userFromDb});
+
+    if (newUser.userName !== userFromDb.userName) {
+      authProvider.isAuthenticated = false;
+      return
+    }
+    authProvider.isAuthenticated = true;
+    callback()
   },
-  signout(callback: VoidFunction) {
-    fakeAuthProvider.isAuthenticated = false;
-    setTimeout(callback, 100); // fake async
+  logout(callback: VoidFunction) {
+    authProvider.isAuthenticated = false;
+    callback()
   },
 };
 
-export { fakeAuthProvider };
+export { authProvider };
