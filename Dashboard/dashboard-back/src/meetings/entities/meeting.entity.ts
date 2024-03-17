@@ -1,6 +1,6 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity('meetings')
+@Entity('dashboard_meetings')
 export class Meeting {
     @PrimaryGeneratedColumn('uuid')
     id: string;
