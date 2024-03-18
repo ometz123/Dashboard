@@ -56,6 +56,13 @@ pnpm install
 ```
 
 Start the development server:
-```sehll
+```shell
 pnpm run start:dev
+```
+# Insert User To DB
+Change <strong>userName</strong> and <strong>password</strong> as you wish.
+
+Run this command
+```shell
+curl "http://localhost:3000/users/create" --header "Content-Type: application/json" --data "{ \"userName\": \"[userName]\", \"password\":\"[password]\" }"
 ```
