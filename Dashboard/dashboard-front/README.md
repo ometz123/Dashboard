@@ -1,12 +1,10 @@
-# Sales Dashboard
+# Sales Dashboard Front
 
 ## Installation
-```shell .env.local
+clone the repo and run these commands: 
+```shell 
+cd dashboard-front
 mv .env.local.example .env.local
 pnpm install
 pnpm dev
-```
-## Set up
-
-```shell
 ```
