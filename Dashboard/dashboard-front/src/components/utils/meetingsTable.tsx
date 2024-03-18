@@ -15,20 +15,19 @@ export default function MeetingsTable({ meetings }: { meetings: Meeting[] }) {
     const [rows, setRows] = React.useState<Meeting[]>(meetings)
 
     const getCompanies = async () => {
-        const meetings = await apiServices.meetings.getAll();
+        let meetings = (await apiServices.meetings.getAll())
         console.log(meetings);
+
+        if (meetings.length > 1) {
+            meetings = meetings.sort((a, b) => new Date(a.meetingDate).getTime() - new Date(b.meetingDate).getTime());
+        }
         setRows(meetings)
     }
 
     React.useEffect(() => {
-        const loadCompanies = async () => {
-            await getCompanies()
-        }
-        loadCompanies()
-    }, []);
-    React.useEffect(() => {
         getCompanies()
     }, [meetings])
+
     return (
         <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -53,7 +52,7 @@ export default function MeetingsTable({ meetings }: { meetings: Meeting[] }) {
                                 {row.location}
                             </TableCell>
                             <TableCell align="left">
-                                {row.meetingDate.toString()}
+                                {new Date(row.meetingDate).toDateString()}
                             </TableCell>
                             <TableCell align="left">
                                 {row.summary}

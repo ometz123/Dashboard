@@ -42,7 +42,6 @@ export default function FormDialog(
                         const formData = new FormData(event.currentTarget);
                         const formJson = Object.fromEntries((formData as any).entries());
                         const companyName = formJson.newCompanyName;
-                        console.log({companyName, companyId});
                         await editFunction({ companyName, companyId })
 
                         handleClose();

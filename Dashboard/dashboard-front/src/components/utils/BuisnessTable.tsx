@@ -18,13 +18,11 @@ export default function BasicTable({ companies }: { companies: Company[] | null 
     const createData = ({ companyName, companyId }: Company) => {
 
         const editCompany = async ({ companyName, companyId }: Company) => {
-            console.log('edit company', companyName, companyId);
             await apiServices.companies.editCompany({ companyName, companyId })
             await getCompanies()
         }
 
         const deleteCompany = async (companyId: string) => {
-            console.log('delete company', companyName, companyId);
             await apiServices.companies.deleteCompany(companyId)
             await getCompanies()
         }
@@ -37,7 +35,6 @@ export default function BasicTable({ companies }: { companies: Company[] | null 
 
     const getCompanies = async () => {
         const companies = await apiServices.companies.getAll();
-        console.log(companies);
         refreshRows(companies)
     }
 

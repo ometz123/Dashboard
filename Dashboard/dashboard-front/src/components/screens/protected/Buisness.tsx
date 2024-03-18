@@ -15,22 +15,14 @@ export default function Buisness() {
 
     const formData = new FormData(event.currentTarget);
     const newCompany = formData.get('newCompany') as string;
-    console.log(newCompany);
     await apiServices.companies.postNewCompany(newCompany)
     await getAllCompanies()
   }
-
-  // const getAllCompanies = async () => {
-  //   const comps = await apiServices.companies.getAll()
-  //   console.log({ comps });
-  //   setCompanies(comps)
-  // }
 
   const getAllCompanies = async () => {
     setLoading(true);
     try {
       const allCompanies = await apiServices.companies.getAll();
-      console.log({ allCompanies });
       setCompanies(allCompanies)
     } catch (e) {
       console.error('Error fetching data:', e);

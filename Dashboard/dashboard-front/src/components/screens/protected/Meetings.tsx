@@ -17,7 +17,6 @@ export default function Meetings() {
     const location = formData.get('location') as string;
     const meetingDate = formData.get('date') as unknown as Date;
     const summary = formData.get('summary') as string;
-    console.log({ companyName, location, meetingDate, summary });
 
     await apiServices.meetings.addNewMeeting({
       companyName,
