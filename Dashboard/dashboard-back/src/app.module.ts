@@ -3,7 +3,6 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { MeetingsModule } from './meetings/meetings.module';
 import { CompaniesModule } from './companies/companies.module';
-import { StatisticsModule } from './statistics/statistics.module';
 import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 // import { Company } from './companies/entities/company.entity';
@@ -22,7 +21,6 @@ import databaseConfig from './config/database.config';
     TypeOrmModule.forRoot(databaseConfig()),
     MeetingsModule,
     CompaniesModule,
-    StatisticsModule,
     UsersModule],
   controllers: [AppController],
   providers: [AppService],

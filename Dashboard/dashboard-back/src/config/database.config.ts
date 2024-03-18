@@ -2,7 +2,6 @@ import { registerAs } from '@nestjs/config';
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { Company } from 'src/companies/entities/company.entity';
 import { Meeting } from 'src/meetings/entities/meeting.entity';
-import { Statistic } from 'src/statistics/entities/statistic.entity';
 import { User } from 'src/users/entities/user.entity';
 
 export default registerAs(
@@ -18,6 +17,6 @@ export default registerAs(
             encrypt: false,
         },
         synchronize: true,
-        entities: [Company, User, Meeting, Statistic],
+        entities: [Company, User, Meeting],
     }),
 );
