@@ -37,13 +37,13 @@ export default function FormDialog(
                 onClose={handleClose}
                 PaperProps={{
                     component: 'form',
-                    onSubmit:async (event: React.FormEvent<HTMLFormElement>) => {
+                    onSubmit: async (event: React.FormEvent<HTMLFormElement>) => {
                         event.preventDefault();
                         const formData = new FormData(event.currentTarget);
                         const formJson = Object.fromEntries((formData as any).entries());
-                        const newCompanyName = formJson.newCompanyName;
-                        console.log(newCompanyName);
-                        await editFunction({newCompanyName,companyId})
+                        const companyName = formJson.newCompanyName;
+                        console.log({companyName, companyId});
+                        await editFunction({ companyName, companyId })
 
                         handleClose();
                     },

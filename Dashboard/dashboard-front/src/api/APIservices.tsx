@@ -1,6 +1,7 @@
 import axios, { AxiosResponse } from 'axios';
 import { useApi } from './APIHook';
 import { User } from '~/interfaces/user';
+import { Company } from '~/interfaces/companies';
 
 const API_BASE_URL = import.meta.env.VITE_APP_API_BASE_URL
 
@@ -12,36 +13,37 @@ const mockAPI = setTimeout(() => {
 }, 200);
 export const apiServices = {
     companies: {
-        getAll: async () => {
-            return await mockAPI;
-            // const response = (await apiService.get(`/companies`)).data;
-            // console.log(response);
-            // return response
+        getAll: async (): Promise<Company[]> => {
+            const response = (await apiService.get(`/companies`)).data;
+            console.log({ getAll: response });
+            return response.map((c: any) => {
+                c["companyId"] = c['id'];
+                delete c['id']
+                return c
+            })
         },
         getCompanyByName: async (companyName: string) => {
-            return await mockAPI;
             const response = (await apiService.get(`/companies/${companyName}`)).data;
             console.log(response);
             return response
 
         },
-        postNewCompany: async (newCompanyName: string) => {
-            return await mockAPI;
-            // const response = (await apiService.post(`/companies`, { newCompanyName })).data;
-            // console.log(response);
-            // return response
+        postNewCompany: async (companyName: string) => {
+            const response = (await apiService.post(`/companies`, { companyName })).data;
+            console.log(response);
+            return response
         },
-        editCompany: async ({ newCompanyName, companyId }: { newCompanyName: string, companyId: string }) => {
-            return await mockAPI;
-            // const response = (await apiService.put(`/companies`, { newCompanyName, companyId })).data;
-            // console.log(response);
-            // return response
+        editCompany: async ({ companyName, companyId }: Company) => {
+            console.log(companyId, companyName);
+
+            const response = (await apiService.patch(`/companies/${companyId}`, { companyName })).data;
+            console.log(response);
+            return response
         },
-        deleteCompany: async (id: string) => {
-            return await mockAPI;
-            // const response = await apiService.delete(`/companies/${id}`);
-            // console.log(response);
-            // return response
+        deleteCompany: async (companyId: string) => {
+            const response = await apiService.delete(`/companies/${companyId}`);
+            console.log(response);
+            return response
         }
     },
     meetings: {
@@ -83,7 +85,7 @@ export const apiServices = {
             }).catch((e) => {
                 alert(e?.response?.data?.message)
             }));
-            console.log({ response });
+            //console.log({ response });
             return response?.data
         }
     },

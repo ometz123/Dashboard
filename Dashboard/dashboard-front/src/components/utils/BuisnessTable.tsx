@@ -9,55 +9,54 @@ import Paper from '@mui/material/Paper';
 import { Button } from '@mui/material';
 import { apiServices } from '~/api/APIservices';
 import FormDialog from './dialog';
+import { Company } from '~/interfaces/companies';
 
-export default function BasicTable() {
-    
-    function createData(companyName: string, companyId: string) {
 
-        const editCompany = async (
-            {
-                newCompanyName,
-                companyId
-            }: {
-                newCompanyName: string,
-                companyId: string
-            }) => {
-            console.log('edit company', newCompanyName, companyId);
-            await apiServices.companies.editCompany({ newCompanyName, companyId })
-            //getCompanies
+
+
+export default function BasicTable({ companies }: { companies: Company[] | null }) {
+    const createData = ({ companyName, companyId }: Company) => {
+
+        const editCompany = async ({ companyName, companyId }: Company) => {
+            console.log('edit company', companyName, companyId);
+            await apiServices.companies.editCompany({ companyName, companyId })
+            await getCompanies()
         }
 
-        const deleteCompany = async (id: string) => {
-            console.log('delete company', companyName);
-            await apiServices.companies.deleteCompany(id)
-            //getCompanies
+        const deleteCompany = async (companyId: string) => {
+            console.log('delete company', companyName, companyId);
+            await apiServices.companies.deleteCompany(companyId)
+            await getCompanies()
         }
 
         return { companyName, companyId, editCompany, deleteCompany };
     }
-    const initialRows = [
-        createData('Frozen yoghurt', 'Frozen yoghurt'),
-        createData('Ice cream sandwich', 'Ice cream sandwich'),
-        createData('Eclair', 'Eclair'),
-        createData('Cupcake', 'Cupcake'),
-        createData('Gingerbread', 'Gingerbread'),
-    ];
 
-    const [rows, setRows] = React.useState(initialRows)
-
+    const comps = companies?.map((c: Company) => createData(c));
+    const [rows, setRows] = React.useState(comps)
 
     const getCompanies = async () => {
         const companies = await apiServices.companies.getAll();
         console.log(companies);
-
-        //setRows(companies)
+        refreshRows(companies)
     }
+
+    const refreshRows = (companies: Company[] | null) => {
+        const comps = companies?.map((c: Company) => createData(c));
+        setRows(comps)
+    }
+
     React.useEffect(() => {
         const loadCompanies = async () => {
             await getCompanies()
         }
         loadCompanies()
     }, [])
+
+    React.useEffect(() => {
+        refreshRows(companies)
+    }, [companies])
+
     return (
         <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -69,7 +68,7 @@ export default function BasicTable() {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {rows.map((row) => (
+                    {rows?.map((row) => (
                         <TableRow
                             key={row.companyId}
                             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
