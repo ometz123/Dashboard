@@ -10,36 +10,25 @@ import { Button } from '@mui/material';
 import { apiServices } from '~/api/APIservices';
 import FormDialog from './dialog';
 
-export default function MeetingsTable({ tableData }: { tableData: Array<any> }) {
-    function createData(companyName: string, companyId: string, location: string, date: string, summary: string) {
+export default function MeetingsTable({ meetings }: { meetings: Meeting[] }) {
 
-
-        return { companyName, companyId, location, date, summary };
-    }
-    const initialRows = [
-        createData('Frozen yoghurt', 'Frozen yoghurt', "aaa", "bbb", "ccc"),
-        createData('Ice cream sandwich', 'Ice cream sandwich', "aaa", "bbb", "ccc"),
-        createData('Eclair', 'Eclair', "aaa", "bbb", "ccc"),
-        createData('Cupcake', 'Cupcake', "aaa", "bbb", "ccc"),
-        createData('Gingerbread', 'Gingerbread', "aaa", "bbb", "asdfasdf"),
-    ];
-
-    const [rows, setRows] = React.useState(initialRows)
-
+    const [rows, setRows] = React.useState<Meeting[]>(meetings)
 
     const getCompanies = async () => {
-        const companies = await apiServices.companies.getAll();
-        console.log(companies);
-
-        //setRows(companies)
+        const meetings = await apiServices.meetings.getAll();
+        console.log(meetings);
+        setRows(meetings)
     }
+
     React.useEffect(() => {
         const loadCompanies = async () => {
             await getCompanies()
         }
         loadCompanies()
     }, []);
-
+    React.useEffect(() => {
+        getCompanies()
+    }, [meetings])
     return (
         <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -52,7 +41,7 @@ export default function MeetingsTable({ tableData }: { tableData: Array<any> }) 
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {rows.map((row) => (
+                    {rows?.map((row) => (
                         <TableRow
                             key={row.companyId}
                             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -64,7 +53,7 @@ export default function MeetingsTable({ tableData }: { tableData: Array<any> }) 
                                 {row.location}
                             </TableCell>
                             <TableCell align="left">
-                                {row.date}
+                                {row.meetingDate.toString()}
                             </TableCell>
                             <TableCell align="left">
                                 {row.summary}

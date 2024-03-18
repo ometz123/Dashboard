@@ -23,6 +23,7 @@ export class MeetingsService {
       summary
     })
     await this.meetingsRepository.save(meeting)
+    return 'Meeting added successfully'
   }
 
   findAll() {

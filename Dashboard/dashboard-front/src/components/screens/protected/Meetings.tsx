@@ -7,16 +7,27 @@ import BasicTable from '~/components/utils/BuisnessTable';
 import MeetingsTable from '~/components/utils/meetingsTable';
 
 export default function Meetings() {
-  const [tableData, setTableData] = useState([])
+  const [meetings, setMeetings] = useState<Meeting[]>([])
+
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const formData = new FormData(event.currentTarget);
     const companyName = formData.get('companyName') as string;
     const location = formData.get('location') as string;
-    const date = formData.get('date') as string;
+    const meetingDate = formData.get('date') as unknown as Date;
     const summary = formData.get('summary') as string;
-    console.log(companyName, location, date, summary);
+    console.log({ companyName, location, meetingDate, summary });
+
+    await apiServices.meetings.addNewMeeting({
+      companyName,
+      location,
+      meetingDate,
+      summary
+    })
+
+    const meetings = await apiServices.meetings.getAll();
+    setMeetings(meetings)
     //add to list
   }
   const checkCompanyExisted = async (companyName: string) => {
@@ -52,7 +63,7 @@ export default function Meetings() {
                 </div>
               </div>
             </form>
-            <MeetingsTable tableData={tableData} />
+            <MeetingsTable meetings={meetings} />
           </div>
         </div>
       </div>

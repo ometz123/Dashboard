@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsInt, IsString, IsDate, MaxLength, MinLength } from 'class-validator';
+import { IsNotEmpty, IsInt, IsString, IsDate, MaxLength, MinLength, IsDateString } from 'class-validator';
 
 export class CreateMeetingDto {
     @IsNotEmpty({ message: 'companyName field cannot be empty' })
@@ -14,7 +14,7 @@ export class CreateMeetingDto {
     location: string
 
     @IsNotEmpty({ message: 'meetingDate field cannot be empty' })
-    @IsDate()
+    @IsDateString()
     meetingDate: Date
 
     @IsNotEmpty({ message: 'summary field cannot be empty' })

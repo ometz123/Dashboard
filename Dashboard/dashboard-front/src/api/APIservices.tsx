@@ -47,35 +47,37 @@ export const apiServices = {
         }
     },
     meetings: {
-        getAll: async () => {
-            return await mockAPI;
-            // const response = (await apiService.get(`/meetings`)).data;
-            // console.log(response);
-            // return response
+        getAll: async (): Promise<Meeting[]> => {
+            const response = (await apiService.get(`/meetings`)).data;
+            console.log(response);
+            return response.map((m: any) => {
+                m["companyId"] = m['id'];
+                delete m['id']
+                return m
+            })
         },
         addNewMeeting: async ({
             companyName,
-            companyId,
+            //companyId,
             location,
-            date,
+            meetingDate,
             summary
         }: {
             companyName: string,
-            companyId: string,
+            //companyId: string,
             location: string,
-            date: Date,
+            meetingDate: Date,
             summary: string
         }) => {
-            return await mockAPI;
-            // const response = (await apiService.post(`/meetings`,{
-            //     companyName,
-            //     companyId,
-            //     location,
-            //     date,
-            //     summary
-            // })).data;
-            // console.log(response);
-            // return response
+            const response = (await apiService.post(`/meetings`, {
+                companyName,
+                //companyId,
+                location,
+                meetingDate,
+                summary
+            })).data;
+            console.log(response);
+            return response
         }
     },
     users: {
