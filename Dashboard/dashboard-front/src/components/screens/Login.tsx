@@ -20,7 +20,6 @@ export default function Login() {
     const userName = formData.get('userName') as string;
     const password = formData.get('password') as string;
 
-    console.log({ userName, password });
 
     auth.login({ userName, password }, () => {
       // Sends the user back to the page he tried to visit

@@ -26,7 +26,7 @@ export class CompaniesService {
   // findOne(id: number) {
   //   return `This action returns a #${id} company`;
   // }
-  
+
   async fetchCompanyById(id: string): Promise<Company> {
     const found = await this.companiesRepository.findOne({ where: { id } });
     if (!found) {

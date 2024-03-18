@@ -16,22 +16,17 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType>(null!);
 
 function AuthProvider({ children }: { children: ReactNode }) {
-  console.log("in auth provider");
 
   const [user, setUser] = useState<User | null>(null);
 
   const login = async (newUser: User, callback: VoidFunction) => {
-    console.log("in login");
-    console.log({ newUser });
 
 
     const { userName, password } = newUser
 
     const user = await apiServices.users.login({ userName, password })
-    console.log({ user });
 
     return authProvider.login(newUser, user, () => {
-      console.log("in auth provider login");
 
       setUser(newUser);
       callback();
@@ -52,13 +47,11 @@ function AuthProvider({ children }: { children: ReactNode }) {
 }
 
 function useAuth() {
-  console.log("in use auth");
 
   return useContext(AuthContext);
 }
 
 function AuthStatus() {
-  console.log("in auth status");
 
   const auth = useAuth();
   const navigate = useNavigate();
@@ -87,7 +80,6 @@ type RequireAuthProps = {
 };
 
 function RequireAuth({ children }: RequireAuthProps) {
-  console.log("in require auth");
 
   const auth = useAuth();
   const location = useLocation();
